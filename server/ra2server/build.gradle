@@ -1,0 +1,146 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group 'org.game.ra2'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 11
+targetCompatibility = 11
+
+// build.gradle (Module level 或直接在项目根 build.gradle)
+allprojects {
+    repositories {
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+        mavenCentral()
+    }
+}
+
+dependencies {
+    // SLF4J API (1.x)
+    implementation 'org.slf4j:slf4j-api:1.7.30'
+
+    // Log4j2 实现与 SLF4J 的桥接器（使用的是 SLF4J 1.x 对应的绑定）
+    implementation "org.apache.logging.log4j:log4j-slf4j-impl:2.13.3"
+
+    // Log4j2 API 和 Core
+    implementation "org.apache.logging.log4j:log4j-api:2.13.3"
+    implementation 'org.apache.logging.log4j:log4j-core:2.17.1'
+
+    // 其他依赖
+    implementation 'org.apache.commons:commons-lang3:3.18.0'
+    implementation 'io.netty:netty-all:4.1.94.Final'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+
+    // Jackson 依赖
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.15.2'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.15.2'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.15.2'
+
+    // hutool工具库
+    implementation 'cn.hutool:hutool-all:5.8.22'
+
+    // WebSocket客户端
+    implementation 'org.java-websocket:Java-WebSocket:1.5.3'
+
+}
+
+application {
+    mainClass = 'org.game.ra2.GameStartUp'
+}
+
+// 配置jar包输出目录和名称
+jar {
+    destinationDirectory = file('../jar')
+    archiveFileName = 'ra2.jar'
+
+    manifest {
+        attributes(
+                'Main-Class': 'org.game.ra2.GameStartUp'
+        )
+    }
+}
+
+// 配置多个客户端运行任务
+task runClient1(type: JavaExec) {
+    group = "Application"
+    description = "运行测试客户端1"
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'org.game.ra2.client.TestClient'
+    args = ['Player1']
+}
+
+task runClient2(type: JavaExec) {
+    group = "Application"
+    description = "运行测试客户端2"
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'org.game.ra2.client.TestClient'
+    args = ['Player2']
+}
+
+task runClient3(type: JavaExec) {
+    group = "Application"
+    description = "运行测试客户端3"
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'org.game.ra2.client.TestClient'
+    args = ['Player3']
+}
+
+task runClient4(type: JavaExec) {
+    group = "Application"
+    description = "运行测试客户端4"
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'org.game.ra2.client.TestClient'
+    args = ['Player4']
+}
+
+task runClient5(type: JavaExec) {
+    group = "Application"
+    description = "运行测试客户端5"
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'org.game.ra2.client.TestClient'
+    args = ['Player5']
+}
+
+task runClient6(type: JavaExec) {
+    group = "Application"
+    description = "运行测试客户端6"
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'org.game.ra2.client.TestClient'
+    args = ['Player6']
+}
+
+task runClient7(type: JavaExec) {
+    group = "Application"
+    description = "运行测试客户端7"
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'org.game.ra2.client.TestClient'
+    args = ['Player7']
+}
+
+task runClient8(type: JavaExec) {
+    group = "Application"
+    description = "运行测试客户端8"
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'org.game.ra2.client.TestClient'
+    args = ['Player8']
+}
+
+task runMultiPlayerTest(type: JavaExec) {
+    group = "Application"
+    description = "运行多人测试"
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'org.game.ra2.client.MultiPlayerTest'
+}
+
+// 拷贝依赖的jar包到libs目录
+task copyDependencies(type: Copy) {
+    from configurations.runtimeClasspath
+    into '../jar/libs'
+}
+
+build.dependsOn copyDependencies

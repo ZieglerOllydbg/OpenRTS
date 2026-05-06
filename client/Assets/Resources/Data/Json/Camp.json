@@ -1,0 +1,31 @@
+{
+  "ConfCamp": {
+    "1": {
+      "ID": 1,
+      "BarracksPosition": "20,0,40",
+      "VehicleFactoryPosition": "40,0,20",
+      "InitMoney": 12000,
+      "InitPower": 5,
+      "AddMoneyPerSecond": 50,
+      "HealDelayTick": 150
+    },
+    "2": {
+      "ID": 2,
+      "BarracksPosition": "105,0,85",
+      "VehicleFactoryPosition": "85,0,105",
+      "InitMoney": 12000,
+      "InitPower": 5,
+      "AddMoneyPerSecond": 50,
+      "HealDelayTick": 150
+    },
+    "9": {
+      "ID": 9,
+      "BarracksPosition": "105,0,85",
+      "VehicleFactoryPosition": "85,0,105",
+      "InitMoney": 8000,
+      "InitPower": 5,
+      "AddMoneyPerSecond": 50,
+      "HealDelayTick": 150
+    }
+  }
+}

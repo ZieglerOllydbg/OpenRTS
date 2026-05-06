@@ -1,0 +1,146 @@
+# 工作流名称
+name: Build and Deploy Java Server Package
+
+# 工作流触发条件
+on:
+  # 当代码被推送到 main 或 master 分支，且变更发生在 server/ra2server/ 目录下时触发
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'server/ra2server/**'
+  # 允许手动触发工作流
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: '触发构建的原因'
+        required: true
+        type: string
+
+jobs:
+  # =======================================================
+  # 任务 1: 构建并打包应用
+  # =======================================================
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    # 步骤 1.1: 检出代码
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    # 步骤 1.2: 设置 JDK 11 环境
+    - name: Set up JDK 11
+      uses: actions/setup-java@v4
+      with:
+        java-version: '11'
+        distribution: 'corretto'
+        
+    # 步骤 1.3: 授予 Gradle Wrapper 执行权限
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+      working-directory: ./server/ra2server
+      
+    # 步骤 1.4: 使用 Gradle 进行构建
+    - name: Build with Gradle
+      run: ./gradlew build
+      working-directory: ./server/ra2server
+        
+    # 步骤 1.5: 准备用于部署的包
+    - name: Prepare package for deployment
+      run: |
+        mkdir -p staging
+        echo "Copying JAR files and related resources..."
+        cp -r server/jar/* staging/
+        echo "Package content:"
+        ls -l staging
+        
+    # 步骤 1.6: 上传整个部署包作为构建产物
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: server-package # 构建产物的名称
+        path: staging/       # 上传 staging 目录下的所有内容
+
+  # =======================================================
+  # 任务 2: 部署应用到服务器
+  # =======================================================
+  deploy:
+    needs: 
+      - build
+    runs-on: ubuntu-latest
+    
+    # **重要**: 仅在代码被推送到主分支时才执行此任务，避免在Pull Request时部署
+    # 但也允许通过手动触发工作流进行部署
+    if: ${{ (github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')) || (github.event_name == 'workflow_dispatch') }}
+
+    steps:
+      # 步骤 2.1: 下载由 'build' 任务创建的部署包
+      - name: Download deployment package
+        uses: actions/download-artifact@v4
+        with:
+          name: server-package # 必须与 build 任务中上传的 name 完全一致
+      
+      # 步骤 2.2: 将整个部署包的内容安全地拷贝到服务器的临时目录
+      - name: Copy package to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "./*"  # `.` 代表当前目录，`*` 代表所有文件
+          target: "/tmp/my-ra2-deployment" # 拷贝到服务器的一个安全的临时子目录中
+
+      # 步骤 2.3: 在服务器上执行部署和重启命令
+      - name: Deploy and Restart on Server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            # 定义变量，方便维护
+            APP_DIR="/opt/my-ra2"
+            TEMP_DIR="/tmp/my-ra2-deployment"
+            SERVICE_NAME="ra2.service"
+
+            # 1. 停止服务（如果正在运行）
+            echo "Stopping service..."
+            sudo systemctl stop ra2 || echo "Service not running or not exist"
+            
+            # 2. 清空目标应用目录
+            echo "Clearing application directory: $APP_DIR"
+            # 确保目录存在，如果不存在则创建
+            sudo mkdir -p $APP_DIR
+            sudo rm -rf $APP_DIR/*
+
+            # 3. 将临时目录中的所有新文件拷贝到目标应用目录
+            echo "Copying new application files..."
+            sudo cp -r $TEMP_DIR/* $APP_DIR/
+            
+            # 4. 安装或更新systemd服务文件
+            echo "Installing systemd service file..."
+            sudo cp $APP_DIR/$SERVICE_NAME /etc/systemd/system/$SERVICE_NAME
+            sudo chown root:root /etc/systemd/system/$SERVICE_NAME
+            
+            # 5. 重新加载systemd配置
+            echo "Reloading systemd daemon..."
+            sudo systemctl daemon-reload
+            
+            # 6. 设置正确的权限
+            echo "Setting permissions..."
+            sudo chown -R ra2:ra2 $APP_DIR
+            sudo chmod +x $APP_DIR/ra2.sh
+
+            # 7. 启动服务
+            echo "Starting service..."
+            sudo systemctl enable ra2
+            sudo systemctl start ra2
+            
+            # 8. 检查服务状态
+            echo "Checking service status..."
+            sleep 2
+            sudo systemctl status ra2 || echo "Service status check failed"
+
+            # 9. 清理服务器上的临时部署目录
+            echo "Cleaning up temporary directory..."
+            sudo rm -rf $TEMP_DIR

@@ -1,0 +1,17 @@
+{
+    "name": "Wx",
+    "rootNamespace": "",
+    "references": [
+        "GUID:39e0a8d734341a748a11d45f50641371",
+        "GUID:84651a3751eca9349aac36a66bba901b"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

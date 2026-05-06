@@ -1,0 +1,242 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: PetWar
+  m_EditorClassIdentifier: 
+  m_GroupName: PetWar
+  m_Data:
+    m_SerializedData: []
+  m_GUID: d454947d4fb802d488b8e311c333e0b7
+  m_SerializeEntries:
+  - m_GUID: 157f01bf04db0e7438e10d26e22004ec
+    m_Address: Audio/one-click
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Audio
+  - m_GUID: 1fc5805e0fb9e8544ae5e40715259bf9
+    m_Address: Audio/mechanism
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Audio
+  - m_GUID: d5dc2c77f35f3c04bb42adf89c60454f
+    m_Address: Audio/infantry_200ms
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Audio
+  - m_GUID: 483a1d6c721400f4aa814d7d2e69b078
+    m_Address: Audio/grizzly_tank_1000ms
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Audio
+  - m_GUID: 4afdcc641360b8045a7a74535e6ae0d8
+    m_Address: Audio/construction-electric-jackhammer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Audio
+  - m_GUID: 40d9b1373b4b27049b741a85a7f12fe9
+    m_Address: Audio/construction
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Audio
+  - m_GUID: c7e477706e4b0fc468f32c223ecc5d5c
+    m_Address: Audio/click-clear
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Audio
+  - m_GUID: a9cf3af8cbe74614d9fec39457140ac0
+    m_Address: Audio/bgm3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Audio
+  - m_GUID: 62980c9d1247847428c00c3117f72830
+    m_Address: Audio/badger_tank_200ms
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Audio
+  - m_GUID: a68578d139e90bc408f0762faa4ee919
+    m_Address: Fonts/SourceHanSansSC-Regular SDF
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: aebf097732ce13d4497b4d0c41404b87
+    m_Address: Fonts/SourceHanSansSC-Regular
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 7e02ea6e39f487549ae92ad3a2c0673b
+    m_Address: Images/Default
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
+  - m_GUID: 095adfe9d1df13c47a6b8a572231c2dc
+    m_Address: Images/Sell
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
+  - m_GUID: c972926515d0c704fa99a302d16920ac
+    m_Address: Images/fight_icon_direction_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
+  - m_GUID: 9c2c5d9730ead694c87097e4bc3759a5
+    m_Address: Images/Reduce
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
+  - m_GUID: a55b0263f9b2cc146a1146ae61216edb
+    m_Address: Images/Reduce2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
+  - m_GUID: a00ab6c566b64354485ec0cea1ef7d61
+    m_Address: Material/Healthbar-Empty
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
+  - m_GUID: b2046f61c71108442a441b456d234c3a
+    m_Address: Material/Healthbar-Filled-Green
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
+  - m_GUID: 38aa4ff6de97c474f9afbbde8148b67d
+    m_Address: ImageBanner
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
+  - m_GUID: 0c4a62830c7c64d479cab91eec76198e
+    m_Address: Material/Healthbar-Filled-Red
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
+  - m_GUID: d5a9cc521e224ac47a44a2c3a6e3b8ae
+    m_Address: Images/fight_icon_direction_02
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
+  - m_GUID: c8ea5ebbefff1f04f96fda14f46112ca
+    m_Address: Images/f1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
+  - m_GUID: df9891b46b12f694283cf80015265398
+    m_Address: Images/f2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
+  - m_GUID: 7e3e49660f06c5440baa91a6eeee988b
+    m_Address: Images/f3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
+  - m_GUID: 2cef215df67b22f4fbd6d429f33e0281
+    m_Address: Images/SellSelected
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
+  - m_GUID: 0dee0e5c3955f1c4da639a86c9679010
+    m_Address: Images/b1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
+  - m_GUID: be7856df00ed92e469224c0b48217d5c
+    m_Address: Images/b2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
+  - m_GUID: 14d4ccd4a72b0b1428e538dfc03c14a7
+    m_Address: Images/b3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
+  - m_GUID: 6618781a03f2d5948b8e63de1c8bdc5b
+    m_Address: Audio/ui-click
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Audio
+  - m_GUID: 0c976fbe787546c4f8996f65f4f43618
+    m_Address: ImageEnergy
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
+  - m_GUID: 39022102c736a5d4db25b80e9c24b0e4
+    m_Address: ImageLightVehicle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
+  - m_GUID: 45f4f71ae92f4084d9df9c985a7779f9
+    m_Address: ImageCommanderCenter
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
+  - m_GUID: cd1fc217cb23f5c4397bdd0b38c4f27d
+    m_Address: ImageAntiInfantry
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
+  - m_GUID: f34258f5fbd0f2d46b4cd86c8a1895a4
+    m_Address: ImageHeavyVehicle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
+  - m_GUID: be3792dfc6dc2074dbc5fb05202b52fe
+    m_Address: ImageMoney
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
+  - m_GUID: d40c986680d32c24fb869b0018c64b62
+    m_Address: ImageMechineGun
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
+  - m_GUID: 57d09196675704545ba93997de137480
+    m_Address: SimpleRTS.unity
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: b09a7567d402ba145830d2403abd65ae
+    m_Address: ImageUnitA
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
+  - m_GUID: ba47777fd3893a7449d40e26ed73a13c
+    m_Address: ImageUnitC
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
+  - m_GUID: 4e6a2f280bcd9394bbb1e4a5ad49035a
+    m_Address: ImageUnitB
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
+  - m_GUID: 2cda71d11eeb576449191b23dd2fb247
+    m_Address: ImageBK
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
+  - m_GUID: 725fa7a897ee71346b9dd8654f7ff919
+    m_Address: ImageWindow
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
+  - m_GUID: aff574c5b9073a7448a2fe93ed9780c9
+    m_Address: ImagePause
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
+  - m_GUID: 24023e6866024ff4cbe0d816851e754b
+    m_Address: ImageResume
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: a801dcd239e87f844a497796410a19de, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 9ab5b83b0e6fd9240995a44992f5ed81, type: 2}
+    - {fileID: 11400000, guid: 21bb19a73d5b3094d911fd4a7b170971, type: 2}

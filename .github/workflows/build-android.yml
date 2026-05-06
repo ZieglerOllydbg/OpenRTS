@@ -1,0 +1,92 @@
+name: Build Android and Upload to Pgyer
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_name:
+        description: 'Version name'
+        required: false
+        default: ''
+
+jobs:
+  build-android:
+    name: Build Android APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      - name: Cache Unity Library
+        uses: actions/cache@v4
+        with:
+          path: client/Library
+          key: Library-Android-${{ hashFiles('client/Assets/**', 'client/Packages/**', 'client/ProjectSettings/**') }}
+          restore-keys: |
+            Library-Android-
+            Library-
+
+      - name: Build Unity project (Android)
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          targetPlatform: Android
+          projectPath: client
+          androidExportType: androidPackage
+          androidKeystoreName: user.keystore
+          androidKeystoreBase64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          androidKeystorePass: ${{ secrets.ANDROID_KEYSTORE_PASS }}
+          androidKeyaliasName: ${{ secrets.ANDROID_KEYALIAS_NAME }}
+          androidKeyaliasPass: ${{ secrets.ANDROID_KEYALIAS_PASS }}
+          buildName: RA
+          unityVersion: 2022.3.17f1
+
+      - name: Upload to Pgyer
+        run: |
+          APK_FILE=$(find build/Android -name '*.apk' | head -n 1)
+
+          if [ -z "$APK_FILE" ]; then
+            echo 'Error: APK file not found'
+            exit 1
+          fi
+
+          echo "Found APK file: $APK_FILE"
+
+          VERSION_DESC="${{ github.event.inputs.version_name }}"
+          if [ -z "$VERSION_DESC" ]; then
+            VERSION_DESC="Android build - $(date '+%Y-%m-%d %H:%M:%S')\nCommit: ${{ github.sha }}\nBranch: ${{ github.ref_name }}"
+          fi
+
+          RESPONSE=$(curl -s -F "file=@${APK_FILE}" \
+            -F "_api_key=${{ secrets.PGYER_API_KEY }}" \
+            -F "buildInstallType=2" \
+            -F "buildPassword=${{ secrets.PGYER_BUILD_PASSWORD }}" \
+            -F "buildUpdateDescription=${VERSION_DESC}" \
+            https://www.pgyer.com/apiv2/app/upload)
+
+          echo "Pgyer response: $RESPONSE"
+
+          CODE=$(echo $RESPONSE | grep -o '"code":[0-9]*' | grep -o '[0-9]*')
+
+          if [ "$CODE" = '0' ]; then
+            BUILD_KEY=$(echo $RESPONSE | grep -o '"buildKey":"[^"]*"' | cut -d'"' -f4)
+            echo 'Upload succeeded!'
+            echo "Download URL: https://www.pgyer.com/${BUILD_KEY}"
+            echo "Install password: ${{ secrets.PGYER_BUILD_PASSWORD }}"
+          else
+            MESSAGE=$(echo $RESPONSE | grep -o '"message":"[^"]*"' | cut -d'"' -f4)
+            echo "Upload failed: $MESSAGE"
+            exit 1
+          fi
+
+      - name: Upload APK to GitHub Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Android-APK
+          path: build/Android/*.apk

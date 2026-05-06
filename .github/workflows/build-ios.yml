@@ -1,0 +1,189 @@
+name: Build iOS and Upload to Pgyer
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_name:
+        description: '版本名称'
+        required: false
+        default: ''
+
+jobs:
+  # 第一步：在 Linux 上用 Unity 导出 Xcode 项目（节省成本）
+  export-xcode-project:
+    name: 导出 Xcode 项目 (Linux)
+    runs-on: ubuntu-latest
+    
+    steps:
+      # 检出代码
+      - name: 检出仓库
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      # 缓存 Library 文件夹
+      - name: 缓存 Unity Library
+        uses: actions/cache@v3
+        with:
+          path: Library
+          key: Library-iOS-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            Library-iOS-
+            Library-
+
+      # 更新 Unity 版本信息
+      - name: 更新 ProjectVersion.txt
+        run: |
+          cat > ProjectSettings/ProjectVersion.txt << EOF
+          m_EditorVersion: 2022.3.17f1
+          m_EditorVersionWithRevision: 2022.3.17f1 (4fc78088f837)
+          EOF
+          echo "✅ 已更新 Unity 版本信息:"
+          cat ProjectSettings/ProjectVersion.txt
+
+      # 在 Linux 上构建 iOS Xcode 项目
+      - name: 使用 Unity 导出 iOS Xcode 项目
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          targetPlatform: iOS
+          buildName: RA
+          unityVersion: 2022.3.17
+
+      # 上传 Xcode 项目到 Artifacts
+      - name: 上传 Xcode 项目
+        uses: actions/upload-artifact@v3
+        with:
+          name: xcode-project
+          path: build/iOS
+          retention-days: 1
+
+  # 第二步：在 macOS 上编译 Xcode 项目并打包 IPA
+  build-ipa:
+    name: 编译 IPA (macOS)
+    runs-on: macos-latest
+    needs: export-xcode-project
+    
+    steps:
+      # 下载 Xcode 项目
+      - name: 下载 Xcode 项目
+        uses: actions/download-artifact@v3
+        with:
+          name: xcode-project
+          path: build/iOS
+
+      # 设置 Xcode 签名
+      - name: 配置 iOS 签名
+        run: |
+          # 创建临时 keychain
+          security create-keychain -p "${{ secrets.KEYCHAIN_PASSWORD }}" build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p "${{ secrets.KEYCHAIN_PASSWORD }}" build.keychain
+          security set-keychain-settings -t 3600 -u build.keychain
+          
+          # 导入证书
+          echo "${{ secrets.IOS_CERTIFICATE_BASE64 }}" | base64 --decode > certificate.p12
+          security import certificate.p12 -k build.keychain -P "${{ secrets.IOS_CERTIFICATE_PASSWORD }}" -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "${{ secrets.KEYCHAIN_PASSWORD }}" build.keychain
+          
+          # 创建 provisioning profile
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          echo "${{ secrets.IOS_PROVISION_PROFILE_BASE64 }}" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/profile.mobileprovision
+
+      # 构建 IPA
+      - name: 构建 IPA 文件
+        run: |
+          cd build/iOS
+          
+          # 创建 ExportOptions.plist
+          cat > ExportOptions.plist << EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>method</key>
+              <string>ad-hoc</string>
+              <key>teamID</key>
+              <string>${{ secrets.IOS_TEAM_ID }}</string>
+              <key>provisioningProfiles</key>
+              <dict>
+                  <key>${{ secrets.IOS_BUNDLE_ID }}</key>
+                  <string>${{ secrets.IOS_PROVISION_PROFILE_NAME }}</string>
+              </dict>
+          </dict>
+          </plist>
+          EOF
+          
+          # 使用 xcodebuild 构建 IPA
+          xcodebuild -project Unity-iPhone.xcodeproj \
+            -scheme Unity-iPhone \
+            -configuration Release \
+            -archivePath ./RA.xcarchive \
+            archive
+          
+          xcodebuild -exportArchive \
+            -archivePath ./RA.xcarchive \
+            -exportPath ./output \
+            -exportOptionsPlist ExportOptions.plist
+
+      # 上传到蒲公英
+      - name: 上传到蒲公英
+        run: |
+          # 查找生成的 IPA 文件
+          IPA_FILE=$(find build/iOS/output -name "*.ipa" | head -n 1)
+          
+          if [ -z "$IPA_FILE" ]; then
+            echo "错误: 未找到 IPA 文件"
+            exit 1
+          fi
+          
+          echo "找到 IPA 文件: $IPA_FILE"
+          
+          # 设置版本描述
+          VERSION_DESC="${{ github.event.inputs.version_name }}"
+          if [ -z "$VERSION_DESC" ]; then
+            VERSION_DESC="iOS 版本 - 构建于 $(date '+%Y-%m-%d %H:%M:%S')\n提交: ${{ github.sha }}\n分支: ${{ github.ref_name }}"
+          fi
+          
+          # 上传到蒲公英
+          RESPONSE=$(curl -s -F "file=@${IPA_FILE}" \
+            -F "_api_key=${{ secrets.PGYER_API_KEY }}" \
+            -F "buildInstallType=2" \
+            -F "buildPassword=${{ secrets.PGYER_BUILD_PASSWORD }}" \
+            -F "buildUpdateDescription=${VERSION_DESC}" \
+            https://www.pgyer.com/apiv2/app/upload)
+          
+          echo "蒲公英响应: $RESPONSE"
+          
+          # 检查上传是否成功
+          CODE=$(echo $RESPONSE | grep -o '"code":[0-9]*' | grep -o '[0-9]*')
+          
+          if [ "$CODE" = "0" ]; then
+            BUILD_KEY=$(echo $RESPONSE | grep -o '"buildKey":"[^"]*"' | cut -d'"' -f4)
+            echo "✅ 上传成功!"
+            echo "📱 下载链接: https://www.pgyer.com/${BUILD_KEY}"
+            echo "🔑 安装密码: ${{ secrets.PGYER_BUILD_PASSWORD }}"
+          else
+            MESSAGE=$(echo $RESPONSE | grep -o '"message":"[^"]*"' | cut -d'"' -f4)
+            echo "❌ 上传失败: $MESSAGE"
+            exit 1
+          fi
+
+      # 清理 keychain
+      - name: 清理
+        if: always()
+        run: |
+          security delete-keychain build.keychain || true
+          rm -f certificate.p12
+
+      # 上传构建产物到 GitHub
+      - name: 上传 IPA 到 GitHub Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: iOS-IPA
+          path: build/iOS/output/*.ipa
+

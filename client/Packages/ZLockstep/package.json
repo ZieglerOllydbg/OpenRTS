@@ -1,0 +1,12 @@
+{
+  "name": "com.lowlevel.zlockstep",
+  "displayName": "Lockstep",
+  "version": "1.0.0",
+  "description": "lockstep engine",
+  "unity": "2020.3",
+  "keywords": [
+    "unity"
+  ],
+  "author": "ollydbg",
+  "license": "ISC"
+}

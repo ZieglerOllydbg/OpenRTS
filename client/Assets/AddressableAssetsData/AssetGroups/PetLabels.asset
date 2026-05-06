@@ -1,0 +1,117 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: PetLabels
+  m_EditorClassIdentifier: 
+  m_GroupName: PetLabels
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 05df46d7c080f024abe53c02e7b6a6a8
+  m_SerializeEntries:
+  - m_GUID: a01c44bc02bea6748adbc60b81677ae4
+    m_Address: Building
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Building
+  - m_GUID: a9c02dc1b66c4e144b825282ff746bc7
+    m_Address: CatBullet
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Unit
+  - m_GUID: 3489c0120ec490c47a110032757e3c02
+    m_Address: Cube
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Building
+  - m_GUID: 833ff351ab9c00d419a134706999fee5
+    m_Address: Default
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Building
+  - m_GUID: 9b9e62518218de946944ed1fee4517db
+    m_Address: DogBullet
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Unit
+  - m_GUID: 5fb71cc3b7154754cb8613c80d785214
+    m_Address: HamsterBullet
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Unit
+  - m_GUID: 1622841f2213cda408bf561e896c71a1
+    m_Address: Ring
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Building
+  - m_GUID: c80e834f0233d6344a8dd5598f2e8411
+    m_Address: CommanderCenter
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Building
+  - m_GUID: 3a5657dc99cbab24a99046c56e77dc72
+    m_Address: Energy
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Building
+  - m_GUID: 2c790bc97b42750409a1a2fa8e64f858
+    m_Address: HeavyFactory
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Building
+  - m_GUID: 7715bca3439477c4aa7e2d6b46e06fae
+    m_Address: LightFactory
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Building
+  - m_GUID: 721f44c922434df4eb6e5cd8fa6d62e5
+    m_Address: MachineGun
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Building
+  - m_GUID: 7592c023e0b472b49983f78b39585b75
+    m_Address: Money
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Building
+  - m_GUID: 49b7fe5fb76c31c4f919ed1d316faa3d
+    m_Address: SoldierFactory
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Unit
+  - m_GUID: facd29a6c4bb7b043bfd36c1bf0638c0
+    m_Address: BuildingFactory
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Building
+  - m_GUID: 7635f069d8a294d4d9306ce2c895121c
+    m_Address: UnitB
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 6defa28aee224be4f8bc97c57557da8d
+    m_Address: UnitC
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 6cf6c627c7a42d7468b82dba7ad7caba
+    m_Address: UnitA
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 5a5bd5fb106b7974d9a87fb3b5d04ee8
+    m_Address: SelectCircle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Unit
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: a801dcd239e87f844a497796410a19de, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 30f484b9858799243bfb74f876d2d7fb, type: 2}
+    - {fileID: 11400000, guid: 18dc926b1cc93854489cc052d8c993ea, type: 2}

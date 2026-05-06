@@ -1,0 +1,49 @@
+{
+  "ConfNPC": {
+    "BS001": {
+      "ID": "BS001",
+      "Name": "鬼道士",
+      "AssetName": "BS001",
+      "HP": 100,
+      "Attack": 15,
+      "Defence": 0,
+      "DateTest": "1998/01/05",
+      "TestJsonArray": "[\"player\",\"enemy\"]",
+      "TestJsonObject": "{\"player\":\"enemy\"}"
+    },
+    "BS002": {
+      "ID": "BS002",
+      "Name": "钟馗",
+      "AssetName": "BS002",
+      "HP": 352,
+      "Attack": 22,
+      "Defence": 3,
+      "DateTest": "1997/02/01",
+      "TestJsonArray": "     [22,33,666]",
+      "TestJsonObject": "{\"player\":\"enemy\"}"
+    },
+    "BS003": {
+      "ID": "BS003",
+      "Name": "",
+      "AssetName": "BS003",
+      "HP": 332,
+      "Attack": 3,
+      "Defence": 44,
+      "DateTest": "1996/03/07",
+      "TestJsonArray": "  [\"bad array\",\"error\"",
+      "TestJsonObject": "{\"player\":\"enemy\"}"
+    }
+  },
+  "ConfItem": {
+    "WP001": {
+      "ID": "WP001",
+      "Name": "倚天剑",
+      "AssetName": "ICON01"
+    },
+    "WP002": {
+      "ID": "WP002",
+      "Name": "屠龙刀",
+      "AssetName": "ICON02"
+    }
+  }
+}
