@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Main.unity
     guid: 1a3e217356a19994ba5350db340b5f19
   - enabled: 0
-    path: Assets/Scenes/SimpleRTS.unity
+    path: Assets/Scenes/OpenRTS.unity
     guid: 57d09196675704545ba93997de137480
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: 39dd3d881121fcf4abfe8a87f81683ea, type: 2}
