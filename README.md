@@ -9,6 +9,10 @@ OpenRTS 是一个基于 Unity 和 Java 的实时策略（RTS）游戏框架，�
 - **断线重连**：支持追帧、断线重连、杀端重连等网络异常处理
 - **模块化设计**：严格分层，核心逻辑层完全独立于 Unity
 
+## 演示视频
+
+![OpenRTS 演示](docs/OpenRTS.mp4)
+
 ## 快速开始
 
 ### 启动客户端
@@ -16,7 +20,6 @@ OpenRTS 是一个基于 Unity 和 Java 的实时策略（RTS）游戏框架，�
 1. 使用 Unity 打开 `client` 目录下的项目
 2. 打开场景：
    - [OpenRTS.unity](client/Assets/Scenes/OpenRTS.unity) - OpenRTS 主场景
-   - [Main.unity](client/Assets/Scenes/Main.unity) - 主场景
 3. 点击运行即可体验本地单机模式
 
 ### 启动服务器
