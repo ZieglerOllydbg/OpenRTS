@@ -11,7 +11,7 @@ OpenRTS 是一个基于 Unity 和 Java 的实时策略（RTS）游戏框架，�
 
 ## 演示视频
 
-![OpenRTS 演示](docs/OpenRTS.mp4)
+![OpenRTS 演示](docs/OpenRTS.gif)
 
 <video src="docs/OpenRTS.mp4" controls width="100%">
 您的浏览器不支持 video 标签。
